@@ -13,29 +13,59 @@ tables = soup.findAll("table")
 #tables = BeautifulSoup(req.content, "html.parser").table
 #print(tables)
 
+#determines if it should identify the table by an attribute or by containing specific text
+wantedTableInfos = [{
+    "byAttribute": True,
+    "attribute": "id",
+    "value": "infoboxtable"
+},
+{
+    "byAttribute": False,
+    "attribute": "",
+    "value": "Universal Loves"
+}]
+
+def hasAttributeAs(item, attribute, value):
+    if(attribute in item.attrs and item.attrs[attribute] == value):
+        return True
+    return False
+
+def doesContainText(item, text):
+    if text in item:
+        return True
+    return False
+
+def isWantedTable(table):
+    for info in wantedTableInfos:
+        if info["byAttribute"] and hasAttributeAs(table, info["attribute"], info["value"]):
+            return True
+        elif not info["byAttribute"] and doesContainText(str(table), info["value"]):
+            return True
+    return False
+
+wantedTables = []
+
 count = 1
 for table in tables:
-    if count < 5:
-        print("Table", count)
-        # print(table)
-        # print("")
-        attributes = table.attrs
-        print("Attributes: ", attributes)
-        if ("id" in attributes):
-            print("Table has id!")
+    if isWantedTable(table):
+        wantedTables.append(table)
+        print("Table", count, "is wanted!")
+        print(table)
         print("")
-    # tag = BeautifulSoup(table, 'html.parser').table
-    # tag['id']
-    #print("Table", count)
     count = count + 1
-    # print(table)
-    # if table['id'] == 'infoboxtable':
-    #     print(table)
 
-#print (req.text)
-# trs = soup.find_all('tr')
-# comment = trs[-1].find_next(string=lambda text: isinstance(text, Comment))
-# table_soup = BeautifulSoup(comment, "html.parser")
-
-# for tr in table_soup.find_all('tr'):
-#     print([td.text for td in tr.find_all('td')])
+print ("Wanted tables count: ", len(wantedTableInfos), "Found: ", len(wantedTables))
+# count = 1
+# for table in tables:
+#     if count < 5:
+#         print("Table", count)
+#         # print(table)
+#         # print("")
+#         attributes = table.attrs
+#         print("Attributes: ", attributes)
+#         if ("id" in attributes):
+#             print("Table has id: ", attributes["id"])
+#             if hasAttributeAs(table, "id", "infoboxtable"):
+#                 print("Id is infoboxtable")
+#         print("")
+#     count = count + 1
