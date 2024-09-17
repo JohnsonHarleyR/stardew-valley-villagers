@@ -80,8 +80,8 @@ def getTableRows(table):
     rows = table.findAll("tr")
     return rows
 
-def addCellToAttributeList(list, attributeName, cellText):
-    list.append({"attribute": attributeName, "value": cellText})
+def addToAttributeList(list, attributeName, attributeValue):
+    list.append({"attribute": attributeName, "value": attributeValue})
 
 print("")
 
@@ -92,27 +92,54 @@ for tableWithCategory in wantedTables:
     category = tableWithCategory["category"]
 
     rows = getTableRows(table)
-    tableInfo = {"category": category, "information": []}
+    #tableInfo = {"category": category, "information": []}
     if isInfoTable(table):
         count = 0
         for row in rows:
             cells = row.findAll("td")
-            #print("infoboxtable cells for row", count, ":", cells)
             if count == 0:
-                #infoTableValues.append({"attribute": "Name", "value": cells[0].text})
-                addCellToAttributeList(tableInfo["information"], "Name", cells[0].text.strip())
+                #addCellToAttributeList(tableInfo["information"], "Name", cells[0].text.strip())
+                addToAttributeList(characterInfo, "Name", cells[0].text.strip())
                 print("Name: ",  cells[0].text)
             else:
                 valuesToKeep = ["Birthday", "Address", "Marriage"]
                 valueNameInRow = cells[0].text.strip()
                 if valueNameInRow in valuesToKeep:
                     newValue = cells[1].text.strip()
-                    addCellToAttributeList(tableInfo["information"], valueNameInRow, newValue)
+                    #addCellToAttributeList(tableInfo["information"], valueNameInRow, newValue)
+                    addToAttributeList(characterInfo, valueNameInRow, newValue)
                     print("Found attribute", valueNameInRow, ":", newValue)
             count = count + 1
         print("infotable values: ", tableInfo)
+    else:
+        rowCount = 0
+        giftItems = []
+        for row in rows:
+            if rowCount != 1:
+                cellCount = 0
+                cells = row.findAll("td")
+                for cell in cells:
+                    if cellCount == 1:
+                        giftItems.append(cell.text.strip())
+                        break
+                    cellCount = cellCount + 1
+            rowCount = rowCount + 1
+        #     if count == 0:
+        #         addCellToAttributeList(tableInfo["information"], "Name", cells[0].text.strip())
+        #         print("Name: ",  cells[0].text)
+        #     else:
+        #         valuesToKeep = ["Birthday", "Address", "Marriage"]
+        #         valueNameInRow = cells[0].text.strip()
+        #         if valueNameInRow in valuesToKeep:
+        #             newValue = cells[1].text.strip()
+        #             addCellToAttributeList(tableInfo["information"], valueNameInRow, newValue)
+        #             print("Found attribute", valueNameInRow, ":", newValue)
+        #     count = count + 1
+        #print("infotable values: ", tableInfo)
+        #print("Gift Items: ", giftItems)
+        addToAttributeList(characterInfo, category, giftItems)
 
-    characterInfo.append(tableInfo)
+    #characterInfo.append(tableInfo)
     
         #print("rows for infoboxtable: ", rows)
 print("Character info: ", characterInfo)
