@@ -54,7 +54,47 @@ for table in tables:
         print("")
     count = count + 1
 
-print ("Wanted tables count: ", len(wantedTableInfos), "Found: ", len(wantedTables))
+print("Wanted tables count: ", len(wantedTableInfos), "Found: ", len(wantedTables))
+
+def isInfoTable(table):
+    if hasAttributeAs(table, "id", "infoboxtable"):
+        print('Found infoboxtable!')
+        return True
+    return False
+
+def getTableRows(table):
+    rows = table.findAll("tr")
+    return rows
+
+def addCellToAttributeList(list, attributeName, cellText):
+    list.append({"attribute": attributeName, "value": cellText})
+
+print("")
+for table in wantedTables:
+    if isInfoTable(table):
+        infoTableValues = []
+        count = 0
+        rows = getTableRows(table)
+        for row in rows:
+            cells = row.findAll("td")
+            #print("infoboxtable cells for row", count, ":", cells)
+            if count == 0:
+                #infoTableValues.append({"attribute": "Name", "value": cells[0].text})
+                addCellToAttributeList(infoTableValues, "Name", cells[0].text.strip())
+                print("Name: ",  cells[0].text)
+            else:
+                valuesToKeep = ["Birthday", "Address", "Marriage"]
+                valueNameInRow = cells[0].text.strip()
+                if valueNameInRow in valuesToKeep:
+                    newValue = cells[1].text.strip()
+                    addCellToAttributeList(infoTableValues, valueNameInRow, newValue)
+                    print("Found attribute", valueNameInRow, ":", newValue)
+            count = count + 1
+        print("infotable values: ", infoTableValues)
+
+        #print("rows for infoboxtable: ", rows)
+
+
 # count = 1
 # for table in tables:
 #     if count < 5:
