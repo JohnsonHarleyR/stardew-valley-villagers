@@ -177,16 +177,25 @@ def createCharacterDict():
         addCharactersByTypeToDict(allCharacterNames[type], type, characterDict)
     return characterDict
 
+def formatString(string):
+    return string.lower().strip()
 
-# testCharacterDict = {}
-# addCharactersByTypeToDict(bachelors, "bachelors", testCharacterDict)
-testCharacterDict = createCharacterDict()
-#testCharactersInfos = createCharacterInfosByType(bachelors, "bachelor")
-#print(testCharacterDict)
-print(json.dumps(testCharacterDict, sort_keys=True, indent=4))
+def getInput(textToDisplay):
+    return formatString(input(textToDisplay))
+
+answer = getInput("Create dictionary of all Stardew Valley characters?(y/n): ")
+if answer == 'y':
+    characterDict = createCharacterDict()
+
+    answer = getInput("Successfully created! Would you like to see it?(y/n): ")
+    if answer == 'y':
+        print(json.dumps(characterDict, sort_keys=True, indent=4))
+
+    answer = getInput("Would you like to write the new dictionary to a text file?(y/n): ")
+    if answer == "y":
+        with open('characters.txt', 'w') as convert_file: 
+            convert_file.write(json.dumps(characterDict))
 
 
-# characterUrl = "https://stardewvalleywiki.com/Abigail"
-# newCharacterInfo = grabCharacterInformation(characterUrl)
-# print("Character info: ", newCharacterInfo)
-# print("")
+# testCharacterDict = createCharacterDict()
+# print(json.dumps(testCharacterDict, sort_keys=True, indent=4))
