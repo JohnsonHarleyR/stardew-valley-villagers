@@ -55,6 +55,10 @@ def grabCharacterInformation(url):
     def addToAttributeList(list, attributeName, attributeValue):
         list.append({"attribute": attributeName, "value": attributeValue})
 
+    def addToAttributeDict(dict, attributeName, attributeValue):
+        #list.append({"attribute": attributeName, "value": attributeValue})
+        dict[attributeName] = attributeValue
+
     def hasAttributeAs(item, attribute, value):
         if(attribute in item.attrs and item.attrs[attribute] == value):
             return True
@@ -104,7 +108,8 @@ def grabCharacterInformation(url):
 
     print("")
 
-    characterInfo = []
+    # characterInfo = []
+    characterInfo = {}
     for tableWithCategory in wantedTables:
         table = tableWithCategory["table"]
         category = tableWithCategory["category"]
@@ -115,13 +120,15 @@ def grabCharacterInformation(url):
             for row in rows:
                 cells = row.findAll("td")
                 if count == 0:
-                    addToAttributeList(characterInfo, "Name", cells[0].text.strip())
+                    #addToAttributeList(characterInfo, "Name", cells[0].text.strip())
+                    addToAttributeDict(characterInfo, "Name", cells[0].text.strip())
                 else:
                     valuesToKeep = ["Birthday", "Lives In", "Address", "Marriage"]
                     valueNameInRow = cells[0].text.strip()
                     if valueNameInRow in valuesToKeep:
                         newValue = cells[1].text.strip()
-                        addToAttributeList(characterInfo, valueNameInRow, newValue)
+                        #addToAttributeList(characterInfo, valueNameInRow, newValue)
+                        addToAttributeDict(characterInfo, valueNameInRow, newValue)
                 count = count + 1
         else:
             rowCount = 0
@@ -136,7 +143,8 @@ def grabCharacterInformation(url):
                             break
                         cellCount = cellCount + 1
                 rowCount = rowCount + 1
-            addToAttributeList(characterInfo, category, giftItems)
+            #addToAttributeList(characterInfo, category, giftItems)
+            addToAttributeDict(characterInfo, category, giftItems)
 
     return characterInfo
 
