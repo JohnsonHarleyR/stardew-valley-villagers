@@ -11,6 +11,12 @@ other = ["Birdie", "Bouncer", "Dwarf", "Fizz", "Governor", "Grandpa", "Henchman"
          "Junimos", "Krobus", "Leo", "Mr. Qi" ,"Old Mariner", "Professor Snail",
         "Sandy", "Wizard"]
 
+allCharacterNames = {
+    "bachelors": bachelors,
+    "bachelorettes": bachelorettes,
+    "townspeople": townspeople,
+    "other": other
+}
 
 
 def grabCharacterInformation(url):
@@ -52,8 +58,8 @@ def grabCharacterInformation(url):
         "value": "Universal Hates"
     }]
 
-    def addToAttributeList(list, attributeName, attributeValue):
-        list.append({"attribute": attributeName, "value": attributeValue})
+    # def addToAttributeList(list, attributeName, attributeValue):
+    #     list.append({"attribute": attributeName, "value": attributeValue})
 
     def addToAttributeDict(dict, attributeName, attributeValue):
         #list.append({"attribute": attributeName, "value": attributeValue})
@@ -162,12 +168,21 @@ def addCharactersByTypeToDict(characters, type, dict):
     dict[type] = characterInfos
 
 def createCharacterDict():
-    print("test")
+    characterTypes = list(allCharacterNames.keys())
+    print("character types: ", characterTypes)
+    characterDict = {
+        "characterTypes": characterTypes
+    }
+    for type in characterTypes:
+        addCharactersByTypeToDict(allCharacterNames[type], type, characterDict)
+    return characterDict
 
 
-testCharacterDict = {}
-addCharactersByTypeToDict(bachelors, "bachelors", testCharacterDict)
+# testCharacterDict = {}
+# addCharactersByTypeToDict(bachelors, "bachelors", testCharacterDict)
+testCharacterDict = createCharacterDict()
 #testCharactersInfos = createCharacterInfosByType(bachelors, "bachelor")
+#print(testCharacterDict)
 print(json.dumps(testCharacterDict, sort_keys=True, indent=4))
 
 
