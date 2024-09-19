@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, Comment
+from bs4 import BeautifulSoup
 import requests
 import json
 
@@ -182,29 +182,29 @@ def formatString(string):
 def getInput(textToDisplay):
     return formatString(input(textToDisplay))
 
+def convertToJson(dict):
+    return json.dumps(dict, sort_keys=True, indent=4)
+
 answer = getInput("Create dictionary of all Stardew Valley characters?(y/n): ")
 filePath = "characters.txt"
 if answer == 'y':
     characterDict = createCharacterDict()
+    characterJson = convertToJson(characterDict)
 
     answer = getInput("Successfully created! Would you like to see it?(y/n): ")
     if answer == 'y':
-        print(json.dumps(characterDict, sort_keys=True, indent=4))
+        print(characterJson)
 
     answer = getInput("Would you like to write the new dictionary to a text file?(y/n): ")
     if answer == "y":
         with open(filePath, 'w') as convert_file: 
-            convert_file.write(json.dumps(characterDict))
+            convert_file.write(characterJson)
 else:
     answer = getInput("Would you like to read the existing character data? (y/n): ")
     if answer == "y":
         with open(filePath, 'r') as file:
             try:
                 data = json.load(file)
-                print(json.dumps(data, sort_keys=True, indent=4))
+                print(convertToJson(data))
             except json.JSONDecodeError:
                 print("Invalid JSON format in the file.")
-
-
-# testCharacterDict = createCharacterDict()
-# print(json.dumps(testCharacterDict, sort_keys=True, indent=4))
