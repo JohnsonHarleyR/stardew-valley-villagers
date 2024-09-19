@@ -169,7 +169,6 @@ def addCharactersByTypeToDict(characters, type, dict):
 
 def createCharacterDict():
     characterTypes = list(allCharacterNames.keys())
-    print("character types: ", characterTypes)
     characterDict = {
         "characterTypes": characterTypes
     }
@@ -184,6 +183,7 @@ def getInput(textToDisplay):
     return formatString(input(textToDisplay))
 
 answer = getInput("Create dictionary of all Stardew Valley characters?(y/n): ")
+filePath = "characters.txt"
 if answer == 'y':
     characterDict = createCharacterDict()
 
@@ -193,8 +193,17 @@ if answer == 'y':
 
     answer = getInput("Would you like to write the new dictionary to a text file?(y/n): ")
     if answer == "y":
-        with open('characters.txt', 'w') as convert_file: 
+        with open(filePath, 'w') as convert_file: 
             convert_file.write(json.dumps(characterDict))
+else:
+    answer = getInput("Would you like to read the existing character data? (y/n): ")
+    if answer == "y":
+        with open(filePath, 'r') as file:
+            try:
+                data = json.load(file)
+                print(json.dumps(data, sort_keys=True, indent=4))
+            except json.JSONDecodeError:
+                print("Invalid JSON format in the file.")
 
 
 # testCharacterDict = createCharacterDict()
